@@ -15,7 +15,7 @@ if (builder.Environment.IsDevelopment())
 
 var strTables = urlStorage.AddTables("strTables");
 
-var azFuncLight = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_FunctionsLight>("azfunc-light")
+var azFuncLight = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_FunctionsLight>("azfunclight")
 							.WithReference(strTables)
 							.WaitFor(strTables)
 							.WithEnvironment("DefaultRedirectUrl",defaultRedirectUrl)

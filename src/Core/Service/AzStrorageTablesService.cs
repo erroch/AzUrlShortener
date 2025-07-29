@@ -208,12 +208,31 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 
             foreach (var item in lstUrl)
             {
-                await tblUrls.UpsertEntityAsync(item);
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(item.RowKey))
+                    {
+                        if (string.IsNullOrWhiteSpace(item.PartitionKey))
+                        {
+                            item.PartitionKey = item.RowKey[0].ToString();
+                        }
+
+                        await tblUrls.UpsertEntityAsync(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
             }
 
             if (urlData.NextId != null)
             {
-                await tblUrls.UpsertEntityAsync(urlData.NextId);
+                if (!string.IsNullOrWhiteSpace(urlData.NextId.RowKey) &&
+                    !string.IsNullOrWhiteSpace(urlData.NextId.PartitionKey))
+                {
+                    await tblUrls.UpsertEntityAsync(urlData.NextId);
+                }
             }
 
         }
